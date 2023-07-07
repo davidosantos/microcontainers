@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service # Permite criarmos um serviço para acessarmos os pods criados pelo deployment, a partir de um único IP virtual
+metadata:
+  name: db-service # Nome da configuração de Service
+  labels:
+    app: db # Label aplicada no Service criado, contendo o nome da aplicação
+spec:
+  selector:
+    app: db 
+  ports:
+  - name: db-sv-port # Nome da porta que iremos expor no service
+    port: 3306 # Porta que iremos expor no service
+    targetPort: db # Porta dos pods que iremos distrubuir as requisições

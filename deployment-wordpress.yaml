@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata:
+  name: wordpress-deployment # Nome da configuração de Deployment
+  labels:
+    app: wordpress # Label aplicada no Deployment criado, contendo o nome da aplicação
+spec:
+  replicas: 1 # Quantidade de réplicas do serviço 
+  selector:
+    matchLabels:
+      app: wordpress 
+  template:
+    metadata:
+      labels:
+        app: wordpress 
+    spec:
+      containers:
+        - name: wordpress # Nome do container
+          image: wordpress:latest # Imagem do container
+          imagePullPolicy: "Always" 
+          ports:
+            - containerPort: 80 # Porta do container
+              name: wordpress # Nome da porta, para uso no arquivo de configuração do tipo Service
+          env: # Variáveis de ambiente a serem inseridas no container
+            - name: WORDPRESS_DB_HOST
+              value: db-service:3306
+            - name: WORDPRESS_DB_PASSWORD
+              value: wordpress
+            - name: WORDPRESS_DB_USER
+              value: wordpress
+          volumeMounts: # Configuração de volumes para o container
+            - mountPath: /vol # Caminho do volume no container
+              name: wordpress-data-vol # Nome do volume a ser utilizado (conforme lista de volumes a seguir)
+      volumes: # Lista de volumes a serem utilizados em containers declarados acima
+        - name: wordpress-data-vol
+          persistentVolumeClaim:
+            claimName: wordpress-data-pvc
+      securityContext:
+        fsGroup: 0 # Muda o owner dos volumes montados em containers, para o usuário root
+        runAsUser: 0 # Executa o container utilizando o usuário root

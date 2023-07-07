@@ -1,0 +1,15 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress # Permite criarmos um ingress para acessarmos nosso serviço de maneira externa ao cluster K8S
+metadata:
+  name: wordpress-ingress # Nome da configuração de Ingress
+spec:
+  rules:
+  - http:
+      paths:
+      - path: / # Permite acesso a todos os recursos/páginas do nosso serviço (/qualquer/caminho/possivel)
+        pathType: Prefix # Indica que o path indicado acima, trata-se de um prefixo da URL requisitada
+        backend:
+          service:
+            name: wordpress-service # Nome do service que será direcionada a requisição
+            port:
+              number: 80 # Porta do service que será direcionada a requisição

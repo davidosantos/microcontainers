@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim 
+metadata:
+  name: db-data-pvc # Nome da configuração de PVC
+  labels:
+    app: db-data # Label aplicada no PVC criado, contendo o nome da aplicação
+spec:
+  accessModes:
+    - ReadWriteOnce # Permite que único container acesse o mesmo volume persistente
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 1Gi # Limita o armazenamento em disco do volume em 1GB

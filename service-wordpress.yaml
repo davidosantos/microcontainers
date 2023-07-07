@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service # Permite criarmos um serviço para acessarmos os pods criados pelo deployment, a partir de um único IP virtual
+metadata:
+  name: wordpress-service # Nome da configuração de Service
+  labels:
+    app: wordpress # Label aplicada no Service criado, contendo o nome da aplicação
+spec:
+  selector:
+    app: wordpress 
+  ports:
+  - name: wordpress-sv-port # Nome da porta que iremos expor no service
+    port: 80 # Porta que iremos expor no service
+    targetPort: wordpress # Porta dos pods que iremos distrubuir as requisições

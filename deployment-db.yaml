@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment # Permite especificarmos nossos containers para execução do serviço 
+metadata:
+  name: db-deployment # Nome da configuração de Deployment
+  labels:
+    app: db # Label aplicada no Deployment criado, contendo o nome da aplicação
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: db 
+  template:
+    metadata:
+      labels:
+        app: db # Label aplicada nos pods criados, contendo o nome da aplicação, utilizado pelo matchLabel acima
+    spec:
+      containers:
+        - name: db # Nome do container
+          image: mysql:5.7 # Imagem do container
+          imagePullPolicy: "Always" # Indica que a imagem do container será sempre atualizada
+          ports:
+            - containerPort: 3306 # Porta do container
+              name: db # Nome da porta, para uso no arquivo de configuração do tipo Service
+          env: # Variáveis de ambiente a serem inseridas no container
+            - name: MYSQL_DATABASE
+              value: wordpress
+            - name: MYSQL_PASSWORD
+              value: wordpress
+            - name: MYSQL_ROOT_PASSWORD
+              value: wordpress
+            - name: MYSQL_USER
+              value: wordpress
+          volumeMounts: # Configuração de volumes para o container
+            - mountPath: /vol # Caminho do volume no container
+              name: db-vol # Nome do volume a ser utilizado (conforme lista de volumes a seguir)
+      volumes: # Lista de volumes a serem utilizados em containers declarados acima
+        - name: db-vol # Nome do volume
+          persistentVolumeClaim:
+            claimName: db-data-pvc # Nome da configuração de PVC para esse volume
+      securityContext:
+        fsGroup: 0 # Muda o owner dos volumes montados em containers, para o usuário root
+        runAsUser: 0 # Executa o container utilizando o usuário root
+        # Obs.: Por questões de segurança, evitar utilizar o usuário root em ambiente produtivo
