@@ -12,22 +12,31 @@ spec:
   template:
     metadata:
       labels:
-        app: wordpress 
+        app: wordpress
     spec:
       containers:
         - name: wordpress # Nome do container
           image: wordpress:latest # Imagem do container
-          imagePullPolicy: "Always" 
+          imagePullPolicy: "Always"
           ports:
             - containerPort: 80 # Porta do container
               name: wordpress # Nome da porta, para uso no arquivo de configuração do tipo Service
           env: # Variáveis de ambiente a serem inseridas no container
             - name: WORDPRESS_DB_HOST
-              value: db-service:3306
-            - name: WORDPRESS_DB_PASSWORD
-              value: wordpress
+              valueFrom:
+                configMapKeyRef:
+                  name: configs
+                  key: database_url
             - name: WORDPRESS_DB_USER
-              value: wordpress
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: database_username
+            - name: WORDPRESS_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: database_password
           volumeMounts: # Configuração de volumes para o container
             - mountPath: /vol # Caminho do volume no container
               name: wordpress-data-vol # Nome do volume a ser utilizado (conforme lista de volumes a seguir)
