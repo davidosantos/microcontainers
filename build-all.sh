@@ -1,3 +1,4 @@
+#!/bin/bash
 # Acessar usuário root
 sudo su
 # Instalar K3S com kubectl
