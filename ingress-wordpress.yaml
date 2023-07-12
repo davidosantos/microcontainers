@@ -4,7 +4,8 @@ metadata:
   name: wordpress-ingress # Nome da configuração de Ingress
 spec:
   rules:
-  - http:
+  - host: wordpress-service.com
+  - http: 
       paths:
       - path: / # Permite acesso a todos os recursos/páginas do nosso serviço (/qualquer/caminho/possivel)
         pathType: Prefix # Indica que o path indicado acima, trata-se de um prefixo da URL requisitada
