@@ -26,25 +26,26 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: configs
-                  key: database_name
+                  key: db_name
             - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: secret
-                  key: database_password
+                  key: db_password
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: secret
-                  key: database_root_password
+                  key: db_root_password
             - name: MYSQL_USER
               valueFrom:
                 secretKeyRef:
                   name: secret
-                  key: database_username
+                  key: db_user
           volumeMounts: # Configuração de volumes para o container
             - mountPath: /var/lib/mysql # Caminho do volume no container
               name: db-vol # Nome do volume a ser utilizado (conforme lista de volumes a seguir)
+          resources: {}    
       volumes: # Lista de volumes a serem utilizados em containers declarados acima
         - name: db-vol # Nome do volume
           persistentVolumeClaim:

@@ -5,7 +5,7 @@ metadata:
   labels:
     app: wordpress # Label aplicada no Deployment criado, contendo o nome da aplicação
 spec:
-  replicas: 1 # Quantidade de réplicas do serviço 
+  replicas: 2 # Quantidade de réplicas do serviço 
   selector:
     matchLabels:
       app: wordpress 
@@ -22,24 +22,27 @@ spec:
             - containerPort: 80 # Porta do container
               name: wordpress # Nome da porta, para uso no arquivo de configuração do tipo Service
           env: # Variáveis de ambiente a serem inseridas no container
+            - name: WORDPRESS_DEBUG
+              value: "1"
             - name: WORDPRESS_DB_HOST
               valueFrom:
                 configMapKeyRef:
                   name: configs
-                  key: database_url
+                  key: db_url
             - name: WORDPRESS_DB_USER
               valueFrom:
                 secretKeyRef:
                   name: secret
-                  key: database_username
+                  key: db_user
             - name: WORDPRESS_DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: secret
-                  key: database_password
+                  key: db_password
           volumeMounts: # Configuração de volumes para o container
             - mountPath: /vol # Caminho do volume no container
               name: wordpress-data-vol # Nome do volume a ser utilizado (conforme lista de volumes a seguir)
+          resources: {}    
       volumes: # Lista de volumes a serem utilizados em containers declarados acima
         - name: wordpress-data-vol
           persistentVolumeClaim:

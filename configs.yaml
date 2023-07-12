@@ -3,5 +3,5 @@ kind: ConfigMap
 metadata:
   name: configs
 data:
-  database_url: db-service:3306
-  database_name: wordpress-db
+  db_url: db-service:3306
+  db_name: wordpress

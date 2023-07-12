@@ -10,4 +10,4 @@ spec:
   ports:
   - name: wordpress-sv-port # Nome da porta que iremos expor no service
     port: 80 # Porta que iremos expor no service
-    targetPort: wordpress # Porta dos pods que iremos distrubuir as requisições
+    targetPort: 80 # Porta dos pods que iremos distrubuir as requisições
