@@ -4,15 +4,15 @@
 wait_for_pods() {
   local NAMESPACE="$1"
 
-  while true; do
-    PODS_RUNNING=$(kubectl get pods -n "$1" --no-headers | awk '{print $3}' | grep -v "Running")
+ while true; do
+    local all_running=$(kubectl get pods -n "$NAMESPACE" --no-headers | awk '{print $3}' | grep -v "Running")
 
-    if [ -v "$PODS_RUNNING" ]; then
-      echo "All Pods are running in namespace $1."
-      break
+    if test -n "$all_running"; then
+      echo "Waiting for Pods to be in the 'Running' state in namespace $NAMESPACE..."
+      sleep 5
     else
-      echo "Waiting for Pods to be in the 'Running' state in namespace $1..."
-      sleep 1
+      echo "All Pods are running in namespace $NAMESPACE."
+      break
     fi
   done
 }
