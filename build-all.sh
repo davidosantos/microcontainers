@@ -14,7 +14,7 @@ wait_for_pods() {
 
         else
             echo "Aguardando os pods no namespace $NAMESPACE..."
-            sleep 5
+            sleep 1
         fi
     done
 }
