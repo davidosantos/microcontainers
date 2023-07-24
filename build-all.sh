@@ -5,6 +5,7 @@ wait_for_pods() {
     local NAMESPACE="$1"
 
     while true; do
+        kubectl get pods -n "$NAMESPACE"
         local all_running=$(kubectl get pods -n "$NAMESPACE" --no-headers | awk '{print $3}' | grep -v "Running")
 
         if test -n "$all_running"; then
