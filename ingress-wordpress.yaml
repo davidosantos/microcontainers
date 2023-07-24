@@ -2,9 +2,6 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress # Permite criarmos um ingress para acessarmos nosso serviço de maneira externa ao cluster K8S
 metadata:
   name: wordpress-ingress # Nome da configuração de Ingress
-  annotations:
-    annotations:
-    traefik.ingress.kubernetes.io/router.middlewares: default/https-redirect
 spec:
   rules:
   - host: wordpress-service.com
@@ -19,11 +16,13 @@ spec:
               number: 80 # Porta do service que será direcionada a requisição
 
 ---
-apiVersion: traefik.containo.us/v1alpha1
-kind: Middleware
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
 metadata:
-  name: https-redirect
+  name: traefik
+  namespace: kube-system
 spec:
-  headers:
-    customRequestHeaders:
-      X-Forwarded-Proto: "https"
+  valuesContent: |-
+    additionalArguments:
+      - "--entryPoints.web.proxyProtocol.insecure"
+      - "--entryPoints.web.forwardedHeaders.insecure"
