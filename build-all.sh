@@ -10,6 +10,31 @@ systemctl restart k3s
 
 # Obter informações dos nós do cluster K8S
 kubectl get nodes
-# Observe que possuímos uma única instância de K8S
+
+# Usage example:
+NAMESPACE="kube-system"
+wait_for_pods "$NAMESPACE"
+
 
 kubectl apply -f .
+
+NAMESPACE="default"
+wait_for_pods "$NAMESPACE"
+
+
+
+wait_for_pods() {
+  local NAMESPACE="$1"
+
+  while true; do
+    PODS_RUNNING=$(kubectl get pods -n "$NAMESPACE" --no-headers | awk '{print $3}' | grep -v "Running")
+
+    if [ -z "$PODS_RUNNING" ]; then
+      echo "All Pods are running in namespace $NAMESPACE."
+      break
+    else
+      echo "Waiting for Pods to be in the 'Running' state in namespace $NAMESPACE..."
+      sleep 1
+    fi
+  done
+}
