@@ -2,24 +2,25 @@
 # Instalar K3S com kubectl
 
 wait_for_pods() {
-  local NAMESPACE="$1"
+    local NAMESPACE="$1"
 
- while true; do
-    local all_running=$(kubectl get pods -n "$NAMESPACE" --no-headers | awk '{print $3}' | grep -v "Running")
+    while true; do
+        local all_running=$(kubectl get pods -n "$NAMESPACE" --no-headers | awk '{print $3}' | grep -v "Running")
 
-    if test -n "$all_running"; then
-      echo "Waiting for Pods to be in the 'Running' state in namespace $NAMESPACE..."
-      sleep 5
-    else
-      echo "All Pods are running in namespace $NAMESPACE."
-      break
-    fi
-  done
+        if test -n "$all_running"; then
+            echo "Todos os Pods estão rodando no namespace $NAMESPACE."
+            break
+
+        else
+            echo "Aguardando todos os pods no namespace $NAMESPACE..."
+            sleep 5
+        fi
+    done
 }
 
 curl -sfL https://get.k3s.io | sh -
 # Habilitar permissão para usuário ubuntu obter configuração de acesso ao K8S
-echo K3S_KUBECONFIG_MODE=\"644\" >> /etc/systemd/system/k3s.service.env
+echo K3S_KUBECONFIG_MODE=\"644\" >>/etc/systemd/system/k3s.service.env
 # Restart do serviço k3s para carregar nova config
 systemctl restart k3s
 
@@ -31,7 +32,3 @@ wait_for_pods "kube-system"
 kubectl apply -f .
 
 wait_for_pods "default"
-
-
-
-
