@@ -6,14 +6,14 @@ wait_for_pods() {
 
     while true; do
         kubectl get pods -n "$NAMESPACE"
-        local all_running=$(kubectl get pods -n "$NAMESPACE" --no-headers | awk '{print $3}' | grep -v "Running")
+        local running=$(kubectl get pods -n "$NAMESPACE" --no-headers | awk '{print $3}' | grep "Running")
 
-        if test -n "$all_running"; then
-            echo "Todos os Pods estão rodando no namespace $NAMESPACE."
+        if test -n "$running"; then
+            echo "Há Pods rodando no namespace $NAMESPACE."
             break
 
         else
-            echo "Aguardando todos os pods no namespace $NAMESPACE..."
+            echo "Aguardando os pods no namespace $NAMESPACE..."
             sleep 5
         fi
     done
