@@ -2,6 +2,10 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress # Permite criarmos um ingress para acessarmos nosso serviço de maneira externa ao cluster K8S
 metadata:
   name: wordpress-ingress # Nome da configuração de Ingress
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"  # Redirect HTTP to HTTPS
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"  # Force HTTPS
+    nginx.ingress.kubernetes.io/proxy-set-headers: "X-Forwarded-Proto=https"  # Set X-Forwarded-Proto to https
 spec:
   rules:
   - host: wordpress-service.com
