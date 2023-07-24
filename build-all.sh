@@ -2,18 +2,17 @@
 # Instalar K3S com kubectl
 
 wait_for_pods() {
-    local NAMESPACE="$1"
 
     while true; do
-        kubectl get pods -n "$NAMESPACE"
-        local running=$(kubectl get pods -n "$NAMESPACE" --no-headers | awk '{print $3}' | grep "Running")
+        kubectl get pods -n "$1"
+        local running=$(kubectl get pods -n "$1" --no-headers | awk '{print $3}' | grep "Running")
 
         if test -n "$running"; then
-            echo "Há Pods rodando no namespace $NAMESPACE."
+            echo "Há Pods rodando no namespace $1."
             break
 
         else
-            echo "Aguardando os pods no namespace $NAMESPACE..."
+            echo "Aguardando os pods no namespace $1..."
             sleep 1
         fi
     done

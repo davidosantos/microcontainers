@@ -5,7 +5,7 @@ metadata:
   labels:
     app: wordpress # Label aplicada no Deployment criado, contendo o nome da aplicação
 spec:
-  replicas: 2 # Quantidade de réplicas do serviço 
+  replicas: 1 # Quantidade de réplicas do serviço 
   selector:
     matchLabels:
       app: wordpress 
