@@ -3,9 +3,8 @@ kind: Ingress # Permite criarmos um ingress para acessarmos nosso serviço de ma
 metadata:
   name: wordpress-ingress # Nome da configuração de Ingress
   annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"  # Redirect HTTP to HTTPS
-    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"  # Force HTTPS
-    nginx.ingress.kubernetes.io/proxy-set-headers: "X-Forwarded-Proto=https"  # Set X-Forwarded-Proto to https
+    annotations:
+    traefik.ingress.kubernetes.io/router.middlewares: default/https-redirect
 spec:
   rules:
   - host: wordpress-service.com
@@ -18,3 +17,13 @@ spec:
             name: wordpress-service # Nome do service que será direcionada a requisição
             port:
               number: 80 # Porta do service que será direcionada a requisição
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: https-redirect
+spec:
+  headers:
+    customRequestHeaders:
+      X-Forwarded-Proto: "https"
