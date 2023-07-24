@@ -1,6 +1,4 @@
 #!/bin/bash
-# Acessar usuário root
-sudo su
 # Instalar K3S com kubectl
 curl -sfL https://get.k3s.io | sh -
 # Habilitar permissão para usuário ubuntu obter configuração de acesso ao K8S
