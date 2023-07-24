@@ -15,7 +15,10 @@ spec:
             port:
               number: 80 # Porta do service que será direcionada a requisição
 
----
+--- 
+#Os parametros abaixo são necessários, pois no Killercode roda em HTTPS  nos na porta 80, então precisamos de enviar um header para o container em todas as requests
+#conforme a documentação: https://wordpress.org/support/article/administration-over-ssl/#using-a-reverse-proxy
+# referencia: https://medium.com/@_jonas/traefik-kubernetes-ingress-and-x-forwarded-headers-82194d319b0e
 apiVersion: helm.cattle.io/v1
 kind: HelmChartConfig
 metadata:
